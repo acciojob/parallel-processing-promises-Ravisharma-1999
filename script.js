@@ -1,9 +1,8 @@
 // Array of image URLs
 const imageUrls = [
-    { url: 'https://via.placeholder.com/150' },
-    { url: 'https://via.placeholder.com/200' },
-    { url: 'https://via.placeholder.com/250' },
-    { url: 'https://invalid-url.com/400' }, // Example of an invalid URL
+    { url: 'https://picsum.photos/id/237/200/300' },
+    { url: 'https://picsum.photos/id/238/200/300' },
+    { url: 'https://picsum.photos/id/239/200/300' },
 ];
 
 // Function to download a single image
@@ -17,18 +16,19 @@ function downloadImage(image) {
     });
 }
 
-// Function to handle the download button click
+// Handle the button click
 document.getElementById('download-images-button').addEventListener('click', () => {
     const outputDiv = document.getElementById('output');
-    outputDiv.innerHTML = 'Loading images...';
+    outputDiv.innerHTML = ''; // Clear the output div before loading images
 
-    // Download all images in parallel using Promise.all
+    // Download all images in parallel
     const downloadPromises = imageUrls.map(downloadImage);
 
     Promise.all(downloadPromises)
         .then((images) => {
-            outputDiv.innerHTML = ''; // Clear the loading message
-            images.forEach((img) => {
-                outputDiv.appendChild(img); // Append each downloaded image
-            });
-  
+            images.forEach((img) => outputDiv.appendChild(img)); // Append each downloaded image
+        })
+        .catch((error) => {
+            outputDiv.innerHTML = `<p style="color: red;">${error.message}</p>`;
+        });
+});
